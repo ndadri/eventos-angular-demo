@@ -1,0 +1,41 @@
+<!-- src/app/componentes/lista-tareas/lista-tareas.html -->
+<div class="container">
+  <h2>Gestor de Tareas Interactivo - Eventos en Angular</h2>
+
+  <!-- Escucha de eventos personalizados del componente hijo mediante @Output() -->
+  <app-buscador-tarea
+    (nuevaTareaEvent)="onAgregarTarea($event)"
+    (filtrarEvent)="onFiltrar($event)">
+  </app-buscador-tarea>
+
+  <!-- Muestra el último evento global capturado por @HostListener -->
+  <div class="status-bar">
+    <p><strong>Último evento global registrado:</strong> {{ ultimoMensajeGlobal() }}</p>
+    <small>Prueba: presiona <kbd>ESC</kbd> o haz scroll en la página</small>
+  </div>
+
+  <!-- Contador reactivo usando Signals -->
+  <div class="stats">
+    <span>Total: <strong>{{ tareas().length }}</strong></span>
+    <span>Completadas: <strong>{{ totalCompletadas() }}</strong></span>
+    <span>Filtro activo: <strong>"{{ filtroTexto() || 'ninguno' }}"</strong></span>
+  </div>
+
+  <ul class="task-list">
+    <!-- @for es la nueva sintaxis de Angular 17+ (alternativa a *ngFor) -->
+    @for (t of tareasFiltradas(); track t.id) {
+      <li
+        [class.completed]="t.completada"
+        (click)="toggleCompletada(t.id)">
+
+        <span class="title">{{ t.titulo }}</span>
+        <span class="badge" [class]="t.prioridad.toLowerCase()">{{ t.prioridad }}</span>
+
+        <!-- event.stopPropagation() evita que se active toggleCompletada del <li> padre -->
+        <button class="delete-btn" (click)="eliminarTarea(t.id, $event)">✕ Eliminar</button>
+      </li>
+    } @empty {
+      <p class="empty">No hay tareas que coincidan con el filtro.</p>
+    }
+  </ul>
+</div>

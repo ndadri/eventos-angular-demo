@@ -1,0 +1,11 @@
+/* src/styles.css - Estilos globales */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #f8fafc;
+  font-family: Arial, sans-serif;
+}
